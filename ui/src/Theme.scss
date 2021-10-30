@@ -1,0 +1,191 @@
+/// Slightly lighten a color
+/// @access public
+/// @param {Color} $color - color to tint
+/// @param {Number} $percentage - percentage of `$color` in returned color
+/// @return {Color}
+@function tint($color, $percentage) {
+  @return mix(white, $color, $percentage);
+}
+
+/// Slightly darken a color
+/// @access public
+/// @param {Color} $color - color to shade
+/// @param {Number} $percentage - percentage of `$color` in returned color
+/// @return {Color}
+@function shade($color, $percentage) {
+  @return mix(black, $color, $percentage);
+}
+
+@mixin ClockScreenTheme($season, $tertial, $main-color)
+{
+  .ClockScreen.season-#{$season}.season-tertial-#{$tertial}.day
+  {
+    background-color: $main-color;
+    
+    transition: background-color 45s;
+    *
+    {
+      transition: color 50s, background-color 50s, border-color 50s, fill 50s;
+    }
+    
+      &.day
+      {
+        color: tint($main-color, 80%);
+        background-color: $main-color;
+
+        .DateTime
+        {
+          .ampm
+          {
+            color: tint($main-color, 35%);
+          }
+
+          .date
+          {
+            .weekDay
+            {
+              color: $main-color;
+              background-color: tint($main-color, 80%);
+            }
+          }
+
+          .progressGroup
+          {
+            color: tint($main-color, 50%);
+
+            .weekDay
+            {
+              color: tint($main-color, 30%);
+              background-color: tint($main-color, 80%);
+            }
+          }
+
+          .season .seasonIcon
+          {
+            fill: tint($main-color, 35%);
+          }
+        }
+
+
+         .Notifications
+         {
+           .Event
+           {
+             color: $main-color;
+
+             &.past
+             {
+               background-color: tint($main-color, 35%);
+             }
+
+             &.future, &.present
+             {
+               background-color: tint($main-color, 80%);
+             }
+           }
+         }
+
+         .YearProgress
+         {
+           .quarter
+           {
+            border-color: tint($main-color, 35%);
+
+            .month
+            {
+              color: tint($main-color, 80%);
+              
+              &.present
+              {
+                color: $main-color;
+                background-color: tint($main-color, 80%);
+              }
+
+              &.past
+              {
+                color: tint($main-color, 90%);
+              }
+            }
+           }
+
+           .monthProgress
+           {
+             .marker
+             {
+               fill: tint($main-color, 35%);
+             }
+           }
+        }
+      }
+  }
+}
+
+@include ClockScreenTheme('winter', 1, #74cafc);
+@include ClockScreenTheme('winter', 2, #30a1e2);
+@include ClockScreenTheme('winter', 3, #25c3eb);
+@include ClockScreenTheme('spring', 1, #43be6a);
+@include ClockScreenTheme('spring', 2, #22d45a);
+@include ClockScreenTheme('spring', 3, #6cd33c);
+@include ClockScreenTheme('summer', 1, #f5d629);
+@include ClockScreenTheme('summer', 2, #f3ca11);
+@include ClockScreenTheme('summer', 3, #f3ab11);
+@include ClockScreenTheme('fall', 1, #d45f1c);
+@include ClockScreenTheme('fall', 2, #d4471c);
+@include ClockScreenTheme('fall', 3, #b82815);
+
+.ClockScreen.night
+{
+    color: #444;
+    background-color: #191919;
+
+    transition: background-color 90s;
+
+    *
+    {
+      transition: color 80s, background-color 80s, border-color 80s, fill 80s;
+    }
+    
+    .DateTime
+    {
+      .ampm
+      {
+        color: #272727;
+      }
+
+      .date
+      {
+        .weekDay
+        {
+          background-color: #272727;
+        }
+      }
+
+      .season .seasonIcon
+      {
+        fill: #272727;
+      }
+    }
+
+    .YearProgress
+    {
+      .quarter
+      {
+        .month
+        {
+          &.present
+          {
+            background-color: #272727;
+          }
+        }
+      }
+      
+      .monthProgress
+      {
+        .marker
+        {
+          fill: #272727;
+        }
+      }
+    }
+
+}
