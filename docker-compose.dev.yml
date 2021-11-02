@@ -1,11 +1,11 @@
 version: "3"
 
 services:
-  ui:
+  calendar-server:
     build:
       dockerfile: Dockerfile-dev
     volumes:
-      - ./ui:/app
+      - ./calendar-server:/app
       - node_modules:/app/node_modules/
     
 volumes:
