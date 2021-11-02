@@ -23,7 +23,7 @@ const ClockScreen = (props) => {
 
   return (
     <div className={`ClockScreen ${mode} season-${seasonInfo.season} season-tertial-${seasonTertial}` }>
-      <YearProgress date={props.date}/>
+      <YearProgress date={props.date} weekStartsOnMonday={props.weekStartsOnMonday}/>
       <div className="focus">
           <DateTime date={props.date}/>
       </div>

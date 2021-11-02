@@ -4,6 +4,7 @@ import moonbeams from 'moonbeams'
 
 export const MONTHS = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"]
 export const WEEKDAYS = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"]
+const THURSDAY_INDEX = 4
 
 export const getDateSuffix = ( date ) =>
 {
@@ -28,11 +29,32 @@ export const getDaysInMonth = ( year, monthIndex ) =>
 
 export const getDayOfYear = ( date ) =>
     Array.from({ length: date.getMonth() })
-    .map(( _, monthIndex ) => getDaysInMonth(date.getYear(), monthIndex))
+    .map(( _, monthIndex ) => getDaysInMonth(date.getFullYear(), monthIndex))
     .reduce(( sum, days ) => sum += days, 0)
     + date.getDate()
 
-export const getWeekOfYear = ( date ) => Math.floor(getDayOfYear(date) / WEEKDAYS.length) + 1
+export const getWeekOfYear = ( date, weekStartsOnMonday = false ) =>
+{
+    const jan1 = new Date(date.getFullYear(), 0, 1)
+
+    // ISO_8601: the first week of the year starts with the first Thursday
+    const firstDayInFirstWeek = jan1.getDay() <= THURSDAY_INDEX
+
+    // Calc offset needed to shift week of year increment to be on Sunday or Monday
+    // If weekday starts on Monday then we need to rotate the offset used for Sunday forward by 1
+    const firstWeekOffset = (((weekStartsOnMonday ? (WEEKDAYS.length - 1) : 0) + jan1.getDay()) % WEEKDAYS.length) - 1
+    const weekYear = Math.floor((getDayOfYear(date) + firstWeekOffset) / WEEKDAYS.length) + (firstDayInFirstWeek ? 1 : 0)
+
+    if( weekYear === 0 )
+    {
+        // Week belongs to the previous year
+        // note: This function is called again on the last day of the previous year to account for leap years (which have 53 weeks)
+        // instead of returning a constant 52
+        return getWeekOfYear(new Date(date.getFullYear(), 1, 0))
+    } else {
+        return weekYear
+    }
+}
 
 export const getAstroSeasons = ( year = (new Date()).getFullYear(), hemisphere = "north" ) =>
 {

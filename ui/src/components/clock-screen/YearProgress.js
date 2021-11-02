@@ -61,7 +61,7 @@ const YearProgress = ( props ) =>
           </div>
           <div className="label">
             <span className="unit">w</span>
-            <span className="value">{getWeekOfYear(props.date)}</span>
+            <span className="value">{getWeekOfYear(props.date, props.weekStartsOnMonday)}</span>
           </div>
         </div>
       </div>
