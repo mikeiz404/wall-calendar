@@ -135,57 +135,73 @@
 
 .ClockScreen.night
 {
-    color: #444;
-    background-color: #191919;
+  --primary-1: #444;
+  --primary-2: #0e0e0e;
+  --secondary-1: #272727;
+  --secondary-2: var(--secondary-1);
+}
 
-    transition: background-color 90s;
+.ClockScreen.evening
+{
+  --primary-1: #919191;
+  --primary-2: #191919;
+  --secondary-1: #595959;
+  --secondary-2: #303030;
+}
 
-    *
+.ClockScreen.evening,
+.ClockScreen.night
+{
+  color: var(--primary-1);
+  background-color: var(--primary-2);
+
+  transition: background-color 90s;
+
+  *
+  {
+    transition: color 80s, background-color 80s, border-color 80s, fill 80s;
+  }
+  
+  .DateTime
+  {
+    .ampm
     {
-      transition: color 80s, background-color 80s, border-color 80s, fill 80s;
+      color: var(--secondary-1);
+    }
+
+    .date
+    {
+      .weekDay
+      {
+        background-color: var(--secondary-2);
+      }
+    }
+
+    .season .seasonIcon
+    {
+      fill: var(--secondary-1);
+    }
+  }
+
+  .YearProgress
+  {
+    .quarter
+    {
+      .month
+      {
+        &.present
+        {
+          background-color: var(--secondary-2);
+        }
+      }
     }
     
-    .DateTime
+    .monthProgress
     {
-      .ampm
+      .marker
       {
-        color: #272727;
-      }
-
-      .date
-      {
-        .weekDay
-        {
-          background-color: #272727;
-        }
-      }
-
-      .season .seasonIcon
-      {
-        fill: #272727;
+        fill: var(--secondary-2);
       }
     }
-
-    .YearProgress
-    {
-      .quarter
-      {
-        .month
-        {
-          &.present
-          {
-            background-color: #272727;
-          }
-        }
-      }
-      
-      .monthProgress
-      {
-        .marker
-        {
-          fill: #272727;
-        }
-      }
-    }
-
+  }
 }

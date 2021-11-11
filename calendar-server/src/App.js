@@ -3,11 +3,29 @@ import '@fontsource/roboto'
 
 import './App.scss'
 import ClockScreen from './components/clock-screen/ClockScreen'
+import defaults from './defaults.js'
+
+const parseHourMinute = ( string ) =>
+{
+  const re = /(?<hour>\d{1,2})(:(?<minute>\d{2}))?\s*(?<ampm>am|pm)/i
+  const match = re.exec(string)
+
+  if( match === null ) 
+  {
+    return null
+  } else {
+    return ({
+      hour: Number.parseInt(match.groups.hour) + (match.groups.ampm.toLowerCase() === "pm" ? 12 : 0),
+      minute: Number.parseInt(match.groups.minute) || 0
+    })
+  }
+}
 
 const LATLNG = process.env.REACT_APP_LATLNG.split(',')
 const LAT = LATLNG[0].trim()
 const LNG = LATLNG[1].trim()
 const WEEK_START_MONDAY = process.env.REACT_APP_WEEK_START_MONDAY === "true" || process.env.REACT_APP_WEEK_START_MONDAY === "1"
+const NIGHT_START = parseHourMinute(process.env.REACT_APP_NIGHT_START) || defaults.NIGHT_START
 
 export default function App( )
 {
@@ -34,7 +52,7 @@ export default function App( )
 
   return (
     <div className="App">
-      <ClockScreen date={date} lat={LAT} lng={LNG} weekStartsOnMonday={WEEK_START_MONDAY}/>
+      <ClockScreen date={date} geo={{lat:LAT, lng:LNG}} weekStartsOnMonday={WEEK_START_MONDAY} nightStart={NIGHT_START}/>
     </div>
   )
 }

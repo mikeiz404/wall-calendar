@@ -13,9 +13,19 @@ const calcSeasonProgressTertial = ( seasonStart, seasonEnd, now ) =>
   return tertial
 }
 
-const ClockScreen = (props) => {
-  let times = SunCalc.getTimes(props.date, props.lat, props.lng)
-  const mode = (props.date > times.sunrise && props.date < times.sunset) ? "day" : "night"
+const getTimeClass = ( sunset, night, sunrise, date ) =>
+{
+  // note: it is assumed that night starts sometime between sunset and sunrise
+  if( date > sunrise && date < sunset ) return "day"
+  else if( date < night && date >= sunset ) return "evening"
+  else return "night"
+}
+
+const ClockScreen = ( props ) =>
+{
+  const times = SunCalc.getTimes(props.date, props.geo.lat, props.geo.lng)
+  const night = new Date(props.date.getFullYear(), props.date.getMonth(), props.date.getDate(), props.nightStart.hour, props.nightStart.minute)
+  const mode = getTimeClass(times.sunset, night, times.sunrise, props.date)
   
   const hemisphere = props.lat >= 0 ? "north" : "south"
   const seasonInfo = getAstroSeason(props.date, hemisphere)
