@@ -16,20 +16,33 @@ const calcSeasonProgressTertial = ( seasonStart, seasonEnd, now ) =>
 const getTimeClass = ( sunset, night, sunrise, date ) =>
 {
   // note: it is assumed that night starts sometime between sunset and sunrise
-  if( date > sunrise && date < sunset ) return "day"
-  else if( date < night && date >= sunset ) return "evening"
-  else return "night"
+  // note: it is assumed sunset and sunrise are for the current day
+  if( date >= sunrise && date <= sunset ) return "day"
+  else if(
+    ( night > sunset && date < sunrise ) ||
+    (
+      (
+        ( night < sunrise && date < sunrise ) ||
+        ( night >= sunrise && date >= sunrise )
+      )
+      && date >= night
+    )
+  ) return "night"
+  else return "evening"
 }
 
 const ClockScreen = ( props ) =>
 {
-  const times = SunCalc.getTimes(props.date, props.geo.lat, props.geo.lng)
+  // note: Using a date fixed at 12pm for SunCalc as a hack to work around SunCalc switching over the sunrise and sunset dates at 12:10am instead of 12:00am
+  const {sunset, sunrise} = SunCalc.getTimes(new Date(props.date.getFullYear(), props.date.getMonth(), props.date.getDate(), 12), props.geo.lat, props.geo.lng)
   const night = new Date(props.date.getFullYear(), props.date.getMonth(), props.date.getDate(), props.nightStart.hour, props.nightStart.minute)
-  const mode = getTimeClass(times.sunset, night, times.sunrise, props.date)
+  const mode = getTimeClass(sunset, night, sunrise, props.date)
   
-  const hemisphere = props.lat >= 0 ? "north" : "south"
+  const hemisphere = props.geo.lat >= 0 ? "north" : "south"
   const seasonInfo = getAstroSeason(props.date, hemisphere)
   const seasonTertial = calcSeasonProgressTertial(seasonInfo.start, seasonInfo.end, props.date)
+
+  if( process.env.NODE_ENV === "development") console.debug({ ClockScreen: { props, sunset, sunrise, night, mode, hemisphere, seasonInfo, seasonTertial } })
 
   return (
     <div className={`ClockScreen ${mode} season-${seasonInfo.season} season-tertial-${seasonTertial}` }>

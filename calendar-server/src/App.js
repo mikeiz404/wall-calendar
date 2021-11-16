@@ -22,10 +22,11 @@ const parseHourMinute = ( string ) =>
 }
 
 const LATLNG = process.env.REACT_APP_LATLNG.split(',')
-const LAT = LATLNG[0].trim()
-const LNG = LATLNG[1].trim()
+const GEO = {lat: Number.parseFloat(LATLNG[0].trim()), lng: Number.parseFloat(LATLNG[1].trim())}
 const WEEK_START_MONDAY = process.env.REACT_APP_WEEK_START_MONDAY === "true" || process.env.REACT_APP_WEEK_START_MONDAY === "1"
 const NIGHT_START = parseHourMinute(process.env.REACT_APP_NIGHT_START) || defaults.NIGHT_START
+
+if( process.env.NODE_ENV === "development" ) console.debug({ App: { env: process.env, GEO, WEEK_START_MONDAY, NIGHT_START } })
 
 export default function App( )
 {
@@ -52,7 +53,7 @@ export default function App( )
 
   return (
     <div className="App">
-      <ClockScreen date={date} geo={{lat:LAT, lng:LNG}} weekStartsOnMonday={WEEK_START_MONDAY} nightStart={NIGHT_START}/>
+      <ClockScreen date={date} geo={GEO} weekStartsOnMonday={WEEK_START_MONDAY} nightStart={NIGHT_START}/>
     </div>
   )
 }
