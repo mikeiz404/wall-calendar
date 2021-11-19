@@ -6,40 +6,34 @@ const QUARTERS_IN_YEAR = 4;
 const MONTHS_IN_QUARTER = 3;
 
 const getMonthTemporalVal = ( currentMonthIndex, monthIndex ) => Math.max(-1, Math.min(1, monthIndex - currentMonthIndex))
-const getMarkerPositionStyle = ( monthTop, monthHeight, markerHeight, percent ) => ({ top: `${monthTop - (markerHeight / 2) + (monthHeight * (1 - percent))}px` })
+const getMarkerPositionStyle = ( monthTop, monthHeight, markerHeight, percent ) => ({ marginTop: `${monthTop - (markerHeight / 2) + (monthHeight * (1 - percent))}px` })
 
 const YearProgress = ( props ) =>
 {
   const [currentMonthHeight, setCurrentMonthHeight] = useState(0)
-  const [currentMonthTop, setCurrentMonthTop] = useState(0)
+  const [currentMonthRelativeTop, setCurrentMonthRelativeTop] = useState(0)
   const [monthProgressHeight, setMonthProgressHeight] = useState(0)
 
+  const rootRef = useRef()
   const currentMonthRef = useRef()
   const monthProgressRef = useRef()
 
   const currentMonthProgress = (props.date.getDate() / getDaysInMonth(props.date.getYear(), props.date.getMonth()))
 
-  const measureCurrentMonthEl = ( el ) =>
+  const measurRefs = ( ) =>
   {
-    if( el )
+    if( rootRef.current && currentMonthRef.current )
     {
-      setCurrentMonthHeight(el.offsetHeight)
-      setCurrentMonthTop(el.offsetTop)
+      setCurrentMonthHeight(currentMonthRef.current.offsetHeight)
+      setCurrentMonthRelativeTop(currentMonthRef.current.offsetTop - rootRef.current.offsetTop)
     }
-  }
 
-  const measureMonthProgressEl = ( el ) =>
-  {
-    if( el ) setMonthProgressHeight(el.offsetHeight)
+    if( monthProgressRef.current ) setMonthProgressHeight(monthProgressRef.current.offsetHeight)
   }
 
   // measure refs
   // note: measurement is done with useEffect since when component did mount is called after first render all refs will have been set
-  useEffect(( ) =>
-  {
-    measureCurrentMonthEl(currentMonthRef.current)
-    measureMonthProgressEl(monthProgressRef.current)
-  }, [props.date])
+  useEffect(measurRefs, [props.date])
 
   // remeasure refs on window resize
   // todo: Calculate the offset from the top in terms of relative and absolute units, and set the month progress
@@ -47,20 +41,14 @@ const YearProgress = ( props ) =>
   // to style changes though.
   useEffect(( ) => 
   {
-    const onResize = ( ) =>
-    {
-      measureCurrentMonthEl(currentMonthRef.current)
-      measureMonthProgressEl(monthProgressRef.current)
-    }
-
-    window.addEventListener('resize', onResize)
-
-    return ( ) => window.removeEventListener('resize', onResize)
+    window.addEventListener('resize', measurRefs)
+    return ( ) => window.removeEventListener('resize', measurRefs)
   }, [])
 
-  
+  console.log({currentMonthHeight, currentMonthRelativeTop, monthProgressHeight})
+
   return (
-    <div className="YearProgress">
+    <div className="YearProgress" ref={rootRef}>
       <div className="monthsCol">
         {
           Array.from({length: QUARTERS_IN_YEAR})
@@ -93,7 +81,7 @@ const YearProgress = ( props ) =>
       <div className="monthProgressCol">
         <div className="monthProgress"
           ref={monthProgressRef}
-          style={getMarkerPositionStyle(currentMonthTop, currentMonthHeight, monthProgressHeight, currentMonthProgress)}
+          style={getMarkerPositionStyle(currentMonthRelativeTop, currentMonthHeight, monthProgressHeight, currentMonthProgress)}
         >
           <div className="marker">
             <ArrowLeft className="markerIcon"/>
