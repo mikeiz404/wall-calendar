@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useReducer } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { getDaysInMonth, getWeekOfYear, MONTHS } from '../../dateUtils';
 import { ReactComponent as ArrowLeft } from './images/arrow-left.svg'
 
@@ -10,36 +10,64 @@ const getMarkerPositionStyle = ( monthTop, monthHeight, markerHeight, percent ) 
 
 const YearProgress = ( props ) =>
 {
-  const [, forceUpdate] = useReducer(x => x++, 0)
+  const [currentMonthHeight, setCurrentMonthHeight] = useState(0)
+  const [currentMonthTop, setCurrentMonthTop] = useState(0)
+  const [monthProgressHeight, setMonthProgressHeight] = useState(0)
 
   const currentMonthRef = useRef()
   const monthProgressRef = useRef()
-  
-  const currentMonthHeight = currentMonthRef.current ? currentMonthRef.current.offsetHeight : 0
-  const currentMonthTop = currentMonthRef.current ? currentMonthRef.current.offsetTop : 0
-  const monthProgressHeight = monthProgressRef.current ? monthProgressRef.current.offsetHeight : 0
+
   const currentMonthProgress = (props.date.getDate() / getDaysInMonth(props.date.getYear(), props.date.getMonth()))
-  
-  // Force an update when the window is resized so the month progress will be positioned in the correct location
+
+  const measureCurrentMonthEl = ( el ) =>
+  {
+    if( el )
+    {
+      setCurrentMonthHeight(el.offsetHeight)
+      setCurrentMonthTop(el.offsetTop)
+    }
+  }
+
+  const measureMonthProgressEl = ( el ) =>
+  {
+    if( el ) setMonthProgressHeight(el.offsetHeight)
+  }
+
+  // measure refs
+  // note: measurement is done with useEffect since when component did mount is called after first render all refs will have been set
+  useEffect(( ) =>
+  {
+    measureCurrentMonthEl(currentMonthRef.current)
+    measureMonthProgressEl(monthProgressRef.current)
+  }, [props.date])
+
+  // remeasure refs on window resize
   // todo: Calculate the offset from the top in terms of relative and absolute units, and set the month progress
   // to a fixed width to avoid the need to force an update on window resize. Arguably this is a bit more brittle
   // to style changes though.
   useEffect(( ) => 
   {
-    const onResize = ( ) => forceUpdate()
+    const onResize = ( ) =>
+    {
+      measureCurrentMonthEl(currentMonthRef.current)
+      measureMonthProgressEl(monthProgressRef.current)
+    }
+
     window.addEventListener('resize', onResize)
+
     return ( ) => window.removeEventListener('resize', onResize)
   }, [])
 
+  
   return (
     <div className="YearProgress">
       <div className="monthsCol">
         {
-          Array.from({ length: QUARTERS_IN_YEAR })
+          Array.from({length: QUARTERS_IN_YEAR})
           .map(( _, quarterIndex ) =>
             <div className="quarter" key={quarterIndex}>
               {
-                Array.from({ length: MONTHS_IN_QUARTER })
+                Array.from({length: MONTHS_IN_QUARTER})
                 .map(( _, subMonthIndex ) =>
                 {
                   const monthIndex = quarterIndex * MONTHS_IN_QUARTER + subMonthIndex
@@ -47,7 +75,15 @@ const YearProgress = ( props ) =>
                   const temporalVal = getMonthTemporalVal(props.date.getMonth(), monthIndex)
                   const temporalClasss = { "-1": "past", "0": "present", "1": "future" }[temporalVal]
 
-                  return <div className={["month", temporalClasss].join(' ')} ref={temporalVal === 0 ? currentMonthRef : ( ) => {}} key={monthIndex}>{month}</div>
+                  return (
+                    <div
+                      className={["month", temporalClasss].join(' ')}
+                      ref={temporalVal === 0 ? currentMonthRef : undefined}
+                      key={monthIndex}
+                    >
+                      {month}
+                    </div>
+                  )
                 })
               }
               </div>
@@ -55,7 +91,10 @@ const YearProgress = ( props ) =>
         }
       </div>
       <div className="monthProgressCol">
-        <div className="monthProgress" ref={monthProgressRef} style={getMarkerPositionStyle(currentMonthTop, currentMonthHeight, monthProgressHeight, currentMonthProgress)}>
+        <div className="monthProgress"
+          ref={monthProgressRef}
+          style={getMarkerPositionStyle(currentMonthTop, currentMonthHeight, monthProgressHeight, currentMonthProgress)}
+        >
           <div className="marker">
             <ArrowLeft className="markerIcon"/>
           </div>
