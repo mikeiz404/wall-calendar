@@ -10,7 +10,7 @@ const ICONS = { 'spring': Spring, 'summer': Summer, 'fall': Fall, 'winter': Wint
 const SeasonIcon = ( props ) =>
 {
     const Icon = ICONS[props.season]
-    return <Icon className="seasonIcon"/>
+    return <Icon {...props}/>
 }
 
 export default SeasonIcon

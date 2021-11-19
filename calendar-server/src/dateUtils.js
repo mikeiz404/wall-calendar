@@ -5,6 +5,8 @@ import moonbeams from 'moonbeams'
 export const MONTHS = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"]
 export const WEEKDAYS = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"]
 const THURSDAY_INDEX = 4
+export const SEASONS_NORTH = ["spring", "summer", "fall", "winter"]
+export const SEASONS_SOUTH = ["fall", "winter", "spring", "summer"]
 
 export const getDateSuffix = ( date ) =>
 {
@@ -60,7 +62,7 @@ export const getAstroSeasons = ( year = (new Date()).getFullYear(), hemisphere =
 {
     console.assert(hemisphere === "north" || hemisphere === "south", `hemisphere ('${hemisphere}') must be either 'north' or 'south'.`)
 
-    const seasons = hemisphere === "north" ? ["spring", "summer", "fall", "winter"] : ["fall", "winter", "spring", "summer"]
+    const seasons = hemisphere === "north" ? SEASONS_NORTH : SEASONS_SOUTH
     
     const jdToDate = ( jd ) =>
     {

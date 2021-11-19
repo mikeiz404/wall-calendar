@@ -1,5 +1,5 @@
 import React from 'react';
-import { getAstroSeason, getDateSuffix, WEEKDAYS } from '../../dateUtils';
+import { getAstroSeason, getDateSuffix, SEASONS_NORTH, WEEKDAYS } from '../../dateUtils';
 import SeasonIcon from './SeasonIcon';
 
 const DateTime = ( props ) =>
@@ -22,7 +22,14 @@ const DateTime = ( props ) =>
         <span className="weekDay">{weekDay}</span>&nbsp;<span>the</span>&nbsp;<span className="monthDay">{props.date.getDate()}<span className="suffix">{getDateSuffix(props.date.getDate())}</span></span>
       </div>
       <div className="season">
-        <SeasonIcon season={getAstroSeason(props.date).season} className="seasonIcon"/>
+        {
+          SEASONS_NORTH.map(( season ) =>
+            <SeasonIcon
+              season={season}
+              className={["seasonIcon", season === getAstroSeason(props.date).season ? '' : 'hidden'].join(' ')}
+            />
+          )
+        }
       </div>
     </div>
   )

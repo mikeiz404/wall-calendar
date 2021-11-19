@@ -109,6 +109,14 @@
           width: 4vw;
 
           @include objectShadow();
+
+          &.hidden
+          {
+            position: absolute;
+            z-index: -1;
+            
+            visibility: hidden;
+          }
         }
       }
     }
