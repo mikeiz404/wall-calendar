@@ -1,10 +1,10 @@
 FROM alpine
 
-RUN npk add npm
+RUN apk add npm
 
 WORKDIR /app
 COPY package.json .
-COPY package.lock.json .
+COPY package-lock.json .
 RUN npm i
 
 COPY . .
