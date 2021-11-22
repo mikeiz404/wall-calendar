@@ -22,10 +22,11 @@
   {
     background-color: $main-color;
     
-    transition: background-color 45s;
+    transition: background-color 30s;
+
     *
     {
-      transition: color 50s, background-color 50s, border-color 50s, fill 50s;
+      transition: color 20s, background-color 30s, border-color 20s, fill 20s;
     }
     
       &.day
@@ -120,9 +121,9 @@
   }
 }
 
-@include ClockScreenTheme('winter', 1, #74cafc);
+@include ClockScreenTheme('winter', 1, #2b90e2);
 @include ClockScreenTheme('winter', 2, #30a1e2);
-@include ClockScreenTheme('winter', 3, #25c3eb);
+@include ClockScreenTheme('winter', 3, #21bceb);
 @include ClockScreenTheme('spring', 1, #43be6a);
 @include ClockScreenTheme('spring', 2, #22d45a);
 @include ClockScreenTheme('spring', 3, #6cd33c);
@@ -155,11 +156,11 @@
   color: var(--primary-1);
   background-color: var(--primary-2);
 
-  transition: background-color 90s;
+  transition: background-color 60s;
 
   *
   {
-    transition: color 80s, background-color 80s, border-color 80s, fill 80s;
+    transition: color 45s, background-color 60s, border-color 45s, fill 45s;
   }
   
   .DateTime
