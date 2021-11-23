@@ -69,7 +69,7 @@ const YearProgress = ( props ) =>
                       ref={temporalVal === 0 ? currentMonthRef : undefined}
                       key={monthIndex}
                     >
-                      {month}
+                      <div className="textContainer">{month}</div>
                     </div>
                   )
                 })
