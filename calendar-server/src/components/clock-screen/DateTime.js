@@ -13,7 +13,7 @@ const DateTime = ( props ) =>
 
   return (
     <div className="DateTime">  
-      <div className="Time">
+      <div className="time">
         <span className="hour">{hour < 10 && <span className="padding">0</span>}{hour}</span>
         <span className="minute">{minute < 10 && <span className="padding">0</span>}{minute}</span>
       </div>

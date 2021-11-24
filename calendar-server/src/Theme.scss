@@ -20,104 +20,100 @@
 {
   .ClockScreen.season-#{$season}.season-tertial-#{$tertial}.day
   {
+    --transition-color-time: 20s;
+    --transition-background-time: 30s;
+
+    color: tint($main-color, 80%);
     background-color: $main-color;
     
-    transition: background-color 30s;
+    transition: background-color var(--transition-background-time);
 
-    *
+    .DateTime
     {
-      transition: color 20s, background-color 30s, border-color 20s, fill 20s;
-    }
-    
-      &.day
+      .time
       {
-        color: tint($main-color, 80%);
-        background-color: $main-color;
+        transition: color var(--transition-color-time);
+      }
 
-        .DateTime
+      .ampm
+      {
+        color: tint($main-color, 35%);
+
+        transition: color var(--transition-color-time);
+      }
+
+      .date
+      {
+        & > :not(.weekDay)
         {
-          .ampm
-          {
-            color: tint($main-color, 35%);
-          }
+          transition: color var(--transition-color-time);
+        }
 
-          .date
+        .weekDay
+        {
+          color: $main-color;
+          background-color: tint($main-color, 80%);
+
+          transition: color var(--transition-color-time), background-color var(--transition-background-time);
+        }
+      }
+
+      .season .seasonIcon
+      {
+        fill: tint($main-color, 35%);
+
+        transition: fill var(--transition-color-time);
+      }
+    }
+
+    .YearProgress
+    {
+      .monthsCol
+      {
+        .quarter
+        {
+          border-color: tint($main-color, 35%);
+
+          transition: border-color var(--transition-color-time);
+
+          .month
           {
-            .weekDay
+            color: tint($main-color, 80%);
+
+            transition: color var(--transition-color-time), background-color var(--transition-background-time);
+            
+            &.present
             {
               color: $main-color;
               background-color: tint($main-color, 80%);
             }
-          }
 
-          .progressGroup
-          {
-            color: tint($main-color, 50%);
-
-            .weekDay
+            &.past
             {
-              color: tint($main-color, 30%);
-              background-color: tint($main-color, 80%);
+              color: tint($main-color, 90%);
             }
           }
-
-          .season .seasonIcon
-          {
-            fill: tint($main-color, 35%);
-          }
-        }
-
-
-         .Notifications
-         {
-           .Event
-           {
-             color: $main-color;
-
-             &.past
-             {
-               background-color: tint($main-color, 35%);
-             }
-
-             &.future, &.present
-             {
-               background-color: tint($main-color, 80%);
-             }
-           }
-         }
-
-         .YearProgress
-         {
-           .quarter
-           {
-            border-color: tint($main-color, 35%);
-
-            .month
-            {
-              color: tint($main-color, 80%);
-              
-              &.present
-              {
-                color: $main-color;
-                background-color: tint($main-color, 80%);
-              }
-
-              &.past
-              {
-                color: tint($main-color, 90%);
-              }
-            }
-           }
-
-           .monthProgress
-           {
-             .marker
-             {
-               fill: tint($main-color, 35%);
-             }
-           }
         }
       }
+
+      .monthProgressCol
+      {
+        .monthProgress
+        {
+          .marker
+          {
+            fill: tint($main-color, 35%);
+
+            transition: fill var(--transition-color-time);
+          }
+
+          .label
+          {
+            transition: color var(--transition-color-time);
+          }
+        }
+      }
+    }
   }
 }
 
@@ -153,55 +149,88 @@
 .ClockScreen.evening,
 .ClockScreen.night
 {
+  --transition-color-time: 45s;
+  --transition-background-time: 60s;
+
   color: var(--primary-1);
   background-color: var(--primary-2);
 
   transition: background-color 60s;
 
-  *
-  {
-    transition: color 45s, background-color 60s, border-color 45s, fill 45s;
-  }
-  
   .DateTime
   {
+    .time
+    {
+      transition: color var(--transition-color-time);
+    }
+
     .ampm
     {
       color: var(--secondary-1);
+
+      transition: color var(--transition-color-time);
     }
 
     .date
     {
+      & > :not(.weekDay)
+      {
+        transition: color var(--transition-color-time);
+      }
+
       .weekDay
       {
         background-color: var(--secondary-2);
+
+        transition: color var(--transition-color-time), background-color var(--transition-background-time);
       }
     }
 
     .season .seasonIcon
     {
       fill: var(--secondary-1);
+
+      transition: fill var(--transition-color-time);
     }
   }
 
   .YearProgress
   {
-    .quarter
+    .monthsCol
     {
-      .month
+      .quarter
       {
-        &.present
+        border-color: var(--primary-1);
+
+        transition: border-color var(--transition-color-time);
+
+        .month
         {
-          background-color: var(--secondary-2);
+          transition: color var(--transition-color-time), background-color var(--transition-background-time);
+
+          &.present
+          {
+            background-color: var(--secondary-2);
+          }
         }
       }
     }
-    
-    .monthProgress
+
+    .monthProgressCol
     {
-      .marker
+      .monthProgress
       {
-        fill: var(--secondary-2);
+        .marker
+        {
+          fill: var(--secondary-2);
+
+          transition: fill var(--transition-color-time);
+        }
+
+        .label
+        {
+          transition: color var(--transition-color-time);
+        }
       }
     }
   }

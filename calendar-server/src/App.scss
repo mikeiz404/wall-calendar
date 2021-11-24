@@ -56,7 +56,7 @@
         "time ampm"
         "date qw";
 
-      .Time
+      .time
       {
         display: flex;
         align-items: center;
@@ -143,7 +143,8 @@
 
         &:not(:last-child)
         {
-          border-top: 1px solid;
+          border-top-width: 1px;
+          border-top-style: solid;
         }
 
         .month
