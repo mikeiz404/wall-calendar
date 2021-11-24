@@ -26,6 +26,7 @@ const DateTime = ( props ) =>
           SEASONS_NORTH.map(( season ) =>
             <SeasonIcon
               season={season}
+              key={season}
               className={["seasonIcon", season === getAstroSeason(props.date).season ? '' : 'hidden'].join(' ')}
             />
           )
