@@ -52,7 +52,7 @@ export const getWeekOfYear = ( date, weekStartsOnMonday = false ) =>
         // Week belongs to the previous year
         // note: This function is called again on the last day of the previous year to account for leap years (which have 53 weeks)
         // instead of returning a constant 52
-        return getWeekOfYear(new Date(date.getFullYear(), 1, 0))
+        return getWeekOfYear(new Date(date.getFullYear(), 0, 0))
     } else {
         return weekYear
     }
