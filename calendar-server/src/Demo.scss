@@ -1,0 +1,114 @@
+.DemoController
+{
+    z-index: 1;
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+
+    background-color: black;
+    color: white;
+    
+    user-select: none;
+
+    .control
+    {
+        padding: 8px;
+
+        border-right: 1px solid #919191;
+
+        &:last-child
+        {
+            border-right: none;
+        }
+
+        .label
+        {
+            display: inline-block;
+            padding-right: 10px;
+
+            font-weight: bold;
+        }
+
+        .button
+        {
+            padding: 5px 10px;
+
+            font-size: 1.2rem;
+            vertical-align: middle;
+        }
+
+        &.date .input
+        {
+            width: 110px;
+        }
+
+        &.time .input
+        {
+            width: 110px;
+        }
+
+        &.mode .input
+        {
+            width: 92px;
+        }
+    }
+    
+    @media (max-width: 600px)
+    {
+        display: grid;
+        grid-template-columns: [label] 40px [left] 50px [input] 1fr [right] 50px;
+        
+        padding: 8px;
+        gap: 8px;
+
+        .control
+        {
+            display: contents;
+
+            border: none;
+
+            .label
+            {
+                grid-column: label;
+            }
+
+            .input
+            {
+                grid-column: input;
+            }
+
+            .button
+            {
+                &.left
+                {
+                    grid-column: left;
+                }
+                
+                &.right
+                {
+                    grid-column: right;
+                }
+            }
+
+            &.date .input,
+            &.time .input,
+            &.mode .input
+            {
+                width: auto;
+            }
+        }
+    }
+
+    @media (max-width: 800px) and (min-width: 601px)
+    {
+        .control
+        {
+            .label
+            {
+                display: none;
+            }
+        }
+
+    }
+}

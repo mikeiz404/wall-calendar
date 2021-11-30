@@ -45,8 +45,6 @@ const YearProgress = ( props ) =>
     return ( ) => window.removeEventListener('resize', measurRefs)
   }, [])
 
-  console.log({currentMonthHeight, currentMonthRelativeTop, monthProgressHeight})
-
   return (
     <div className="YearProgress" ref={rootRef}>
       <div className="monthsCol">

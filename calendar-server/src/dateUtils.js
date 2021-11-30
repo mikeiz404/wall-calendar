@@ -1,5 +1,5 @@
 import moonbeams from 'moonbeams'
-
+import SunCalc from 'suncalc'
 
 
 export const MONTHS = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"]
@@ -81,3 +81,29 @@ export const getAstroSeasons = ( year = (new Date()).getFullYear(), hemisphere =
 }
 
 export const getAstroSeason = ( date = new Date(), hemisphere = "north" ) => getAstroSeasons(date.getFullYear(), hemisphere).filter(( seasonInfo ) => date >= seasonInfo.start && date < seasonInfo.end)[0]
+
+export const getTimeClass = ( sunset, night, sunrise, date ) =>
+{
+  // note: it is assumed that night starts sometime between sunset and sunrise
+  // note: it is assumed sunset and sunrise are for the current day
+  if( date >= sunrise && date < sunset ) return "Day"
+  else if(
+    ( night > sunset && date < sunrise ) ||
+    (
+      date >= night &&
+      (
+        ( night < sunrise && date < sunrise ) ||
+        ( night >= sunrise && date >= sunrise )
+      )
+    )
+  ) return "Night"
+  else return "Evening"
+}
+
+export const getSunInfoFromGeo = ( geo, date ) =>
+{
+    // note: Using a date fixed at 12pm for SunCalc as a hack to work around SunCalc switching over the sunrise and sunset dates at 12:10am instead of 12:00am
+    const {sunset, sunrise} = SunCalc.getTimes(new Date(date.getFullYear(), date.getMonth(), date.getDate(), 12), geo.lat, geo.lng)
+    
+    return {sunset, sunrise}
+}
