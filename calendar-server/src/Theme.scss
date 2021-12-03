@@ -155,7 +155,7 @@
   color: var(--primary-1);
   background-color: var(--primary-2);
 
-  transition: background-color 60s;
+  transition: background-color var(--transition-background-time);
 
   .DateTime
   {
